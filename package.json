@@ -1,0 +1,24 @@
+{
+  "name": "DesafioMB",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/math97/DesafioMB.git",
+  "author": "Matheus Alves Albuquerque <math.albuquerque@outlook.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "dev:server": "ts-node-dev --inspect --trnaspile-only --ignore-watch node_modules src/server.ts",
+    "start": "ts-node src/index.ts",
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "ts-node-dev": "^1.1.6",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.6.0",
+    "typeorm": "^0.2.32"
+  }
+}
