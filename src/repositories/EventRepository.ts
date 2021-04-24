@@ -24,6 +24,11 @@ class EventsRepository {
 
     return event;
   }
+
+  public delete(event:Event){
+    const indexEvent = this.events.findIndex(e => e.id ===event.id);  
+    this.events.splice(indexEvent,1);
+  }
 }
 
 export default EventsRepository;
