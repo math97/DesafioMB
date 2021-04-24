@@ -2,6 +2,9 @@ import { Router} from 'express';
 
 import CreateEventService from '../services/eventServices/CreateEventService';
 import SearchAllEventsByOrganizerIdService from '../services/eventServices/SearchAllEventsByOrganizerIdService';
+import UpdateEventService from '../services/eventServices/UpdateEventService';
+
+import EventUpdateDTO from '../dto/eventUpdateDTO';
 
 
 import EventsRepository from '../repositories/EventRepository';
@@ -33,5 +36,16 @@ eventRoutes.get('/',async (request,response)=>{
 
   }
 });
+
+eventRoutes.put('/',async (request,response)=>{
+  
+  const  eventData:EventUpdateDTO  = request.body;
+
+  const updateEvent = new UpdateEventService(eventsRepository);
+
+  const event = await updateEvent.execute(eventData);
+
+  response.json(event);
+})
 
 export default eventRoutes;

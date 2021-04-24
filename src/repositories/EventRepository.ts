@@ -17,6 +17,13 @@ class EventsRepository {
      const events = this.events.filter(organizer => organizer.organizerId === organizerId);
      return events;
   }
+
+  public  findById(eventId:string){
+    
+    const event =  this.events.find(e => e.id ===eventId);
+
+    return event;
+  }
 }
 
 export default EventsRepository;
