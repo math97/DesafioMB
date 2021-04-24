@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "dev:server": "ts-node-dev --inspect --trnaspile-only --ignore-watch node_modules src/server.ts",
+    "dev:server": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
     "start": "ts-node src/index.ts",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
   },
@@ -19,6 +19,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "pg": "^8.6.0",
-    "typeorm": "^0.2.32"
+    "typeorm": "^0.2.32",
+    "uuidv4": "^6.2.7"
   }
 }
