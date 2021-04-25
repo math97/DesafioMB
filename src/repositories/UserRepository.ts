@@ -17,6 +17,11 @@ class UserRepository {
 
     return user;
   }
+  public findByEmail(email:string):User | undefined{
+    const user =  this.users.find(u => u.email === email);
+
+    return user;
+  }
 
 }
 
