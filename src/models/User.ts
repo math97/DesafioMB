@@ -21,7 +21,6 @@ class User {
     this.email = email;
     this.phone_number = phone_number;
   }
-
 }
 
 export default User;

@@ -9,10 +9,7 @@ class UpdateEventService {
   public async execute(eventData:EventUpdateDTO){
 
     const event = this.eventsRepository.findById(eventData.id);
-
-    console.log(event);
     
-
     if(!!event) {
       if(event.ticket_sold > 0) throw new Error('Update denied because tickets already sold');
   

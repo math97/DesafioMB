@@ -12,6 +12,11 @@ class UserRepository {
 
     return user;
   }
+  public findById(id:string):User | undefined{
+    const user =  this.users.find(u => u.id === id);
+
+    return user;
+  }
 
 }
 
