@@ -8,14 +8,14 @@ import DeleteEventService from '../services/eventServices/DeleteEventService';
 
 import EventUpdateDTO from '../dto/eventUpdateDTO';
 
-import EventsRepository from '../repositories/EventRepository';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const eventRoutes = Router()
 
-const eventsRepository = new EventsRepository();
 
-eventRoutes.post('/',ensureAuthenticated,async (request:Request,response:Response)=>{  
+eventRoutes.use(ensureAuthenticated);
+
+eventRoutes.post('/',async (request:Request,response:Response)=>{  
   const {name,description,date,ticket_limit,ticket_price,organizerId } = request.body;
 
   const createEvent = new CreateEventService();
@@ -25,7 +25,7 @@ eventRoutes.post('/',ensureAuthenticated,async (request:Request,response:Respons
   response.json(event);
 });
 
-eventRoutes.get('/',ensureAuthenticated,async (request:Request,response:Response)=>{
+eventRoutes.get('/',async (request:Request,response:Response)=>{
   const {organizer} = request.query;
 
   const searchAllEvents = new SearchAllEvents();
@@ -39,11 +39,14 @@ eventRoutes.get('/',ensureAuthenticated,async (request:Request,response:Response
 }
   const events = await searchAllEvents.execute();
 
+  console.log(events);
+  
+
   response.json(events);
 
 });
 
-eventRoutes.put('/',ensureAuthenticated,async (request:Request,response:Response)=>{
+eventRoutes.put('/',async (request:Request,response:Response)=>{
   
   const  eventData:EventUpdateDTO  = request.body;
 
@@ -54,7 +57,7 @@ eventRoutes.put('/',ensureAuthenticated,async (request:Request,response:Response
   response.json(event);
 });
 
-eventRoutes.delete('/',ensureAuthenticated,async (request:Request,response:Response)=>{  
+eventRoutes.delete('/',async (request:Request,response:Response)=>{  
   const {eventId} = request.query;
   
   if(!eventId || eventId === undefined) throw new Error('eventId not send');

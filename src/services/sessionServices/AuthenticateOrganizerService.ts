@@ -16,13 +16,9 @@ class AuthenticateOrganizerService {
 
     const organizer = await organizersRepository.findOne({where:{email}});
 
-    console.log(organizer);
-
     if (!organizer) throw new Error('Incorrect email/password combination.');
 
     const passwordMatched = password === organizer.password ? true : false ;
-
-    console.log(passwordMatched);
     
     if (!passwordMatched) throw new Error('Incorrect email/password combination.');
 

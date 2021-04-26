@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import {v4 as uuid} from 'uuid';
+import Ticket from './Ticket';
 
 @Entity('users')
 class User {
@@ -21,6 +22,9 @@ class User {
 
   @Column()
   phone_number: number;
+
+  @OneToMany(()=>Ticket,ticket => ticket.user)
+  tickets:Ticket[];
 
   @CreateDateColumn()
   created_at: Date;

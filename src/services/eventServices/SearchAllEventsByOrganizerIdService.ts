@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import EventsRepository from '../../repositories/EventRepository';
+import Event from '../../models/Event';
 
 interface Request {
   organizerId: string,

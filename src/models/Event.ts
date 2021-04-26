@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import Organizer from './Organizer';
+import Ticket from './Ticket';
 
 @Entity('events')
 class Event {
@@ -30,6 +31,9 @@ class Event {
   @ManyToOne(()=>Organizer,organizer=>organizer.events)
   @JoinColumn({name: 'organizer_id'})
   organizer:Organizer;
+
+  @OneToMany(()=>Ticket,ticket => ticket.event)
+  tickets:Ticket[];
 
   @CreateDateColumn()
   created_at: Date;
