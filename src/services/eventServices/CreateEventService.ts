@@ -15,7 +15,7 @@ class CreateEventService {
   public async execute({name,description,date,ticket_limit,ticket_price,ticket_sold,organizerId}:Request):Promise<Event>{
       
       const eventRepository = getRepository(Event);
-      const event = eventRepository.create({name,description,date,ticket_limit,ticket_price,ticket_sold});
+      const event = eventRepository.create({name,description,date,ticket_limit,ticket_price,ticket_sold,organizer_id:organizerId});
 
       await eventRepository.save(event);
 

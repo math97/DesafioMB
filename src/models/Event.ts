@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import Organizer from './Organizer';
 
 @Entity('events')
 class Event {
@@ -9,7 +10,7 @@ class Event {
   name: string;
 
   @Column()
-  description: string //| null;
+  description: string ;
 
   @Column()
   ticket_limit: number;
@@ -23,25 +24,18 @@ class Event {
   @Column()
   date: Date;
 
+  @Column()
+  organizer_id: string;
+
+  @ManyToOne(()=>Organizer,organizer=>organizer.events)
+  @JoinColumn({name: 'organizer_id'})
+  organizer:Organizer;
+
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
-
-  // @Column()
-  // organizerId:string;
-
-  // constructor({name,description,ticket_limit,ticket_price,ticket_sold,date,organizerId}:Omit<Event,'id'>){
-  //   this.id = uuid();
-  //   this.name = name;
-  //   this.description = description;
-  //   this.ticket_limit = ticket_limit;
-  //   this.ticket_price = ticket_price;
-  //   this.ticket_sold = ticket_sold;
-  //   this.date = date;
-  //   this.organizerId = organizerId;
-  // }
 }
 
 export default Event;

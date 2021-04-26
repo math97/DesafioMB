@@ -10,7 +10,7 @@ class SearchAllEventsByOrganizerId {
 
     const eventsRepository = getRepository(Event);
 
-    const events = eventsRepository.find({where:{organizerId}});
+    const events = eventsRepository.find({where:{organizer_id:organizerId}});
 
     return events;
 
