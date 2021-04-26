@@ -1,6 +1,8 @@
 import { sign } from 'jsonwebtoken';
+import { getRepository } from 'typeorm';
 
 import authConfig from '../../config/authConfig';
+import User from '../../models/User';
 import UserRepository from '../../repositories/UserRepository';
 
 interface Request {
@@ -9,28 +11,21 @@ interface Request {
 }
 
 class AuthenticateUserService {
-  private usersRepository : UserRepository;
-
-  constructor(usersRepository:UserRepository){
-    this.usersRepository = usersRepository;
-  }
-
   public async execute( {email, password}:Request ){
 
-    const user =  this.usersRepository.findByEmail(email)
+    const usersRepository = getRepository(User);
+
+    const user = await usersRepository.findOne({where:{email}});
 
     console.log(user);
-    
 
     if (!user) throw new Error('Incorrect email/password combination.');
 
     const passwordMatched = password === user.password ? true : false ;
 
-    console.log(!!passwordMatched);
-    console.log(!passwordMatched);
     console.log(passwordMatched);
-
-   if (!passwordMatched) throw new Error('Incorrect email/password combination.');
+    
+    if (!passwordMatched) throw new Error('Incorrect email/password combination.');
 
     const token = sign({}, authConfig.jwt.secret, {
       subject: user.id,

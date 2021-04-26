@@ -1,5 +1,5 @@
+import { getRepository } from "typeorm";
 import Organizer from "../../models/Organizer";
-import OrganizersRepository from "../../repositories/OrganizerRepository";
 
 interface Request {
   name: string,
@@ -11,20 +11,17 @@ interface Request {
 }
 
 class CreateOrganizeService { 
-  private organizerRepository: OrganizersRepository;
-  
-  constructor(organizerRepository: OrganizersRepository) {
-    this.organizerRepository = organizerRepository;
-  } 
   public async execute({name,companyName,cnpj,password,email,phone_number}:Request):Promise<Organizer>{
-        
-    const organizerEmail = this.organizerRepository.findByEmail(email);
     
-    if(!!organizerEmail) throw new Error('An account with this email already exist')
+    const organizerRepository = getRepository(Organizer);
 
-    const organizer = new Organizer({name,company_name:companyName,cnpj,password,email,phone_number});
+    const organizerEmail = organizerRepository.findOne({where:[{email},{cnpj}]});
+    
+    if(organizerEmail) throw new Error('An account with this email adress or cnpj already exist')
 
-    this.organizerRepository.create(organizer);
+    const organizer = organizerRepository.create({name,cnpj,company_name:companyName,email,phone_number,password});
+
+    organizerRepository.save(organizer);
     
     return organizer;
   }

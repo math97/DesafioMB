@@ -1,7 +1,4 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import {v4 as uuid} from 'uuid';
-
-import Organizer from "./Organizer";
 
 @Entity('events')
 class Event {

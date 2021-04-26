@@ -1,17 +1,13 @@
-import EventsRepository from "../../repositories/EventRepository";
+import { getRepository } from "typeorm";
+import Event from '../../models/Event';
 
 class DeleteEventService {
-
-  private eventsRepository : EventsRepository
-
-  constructor(eventsRepository:EventsRepository){
-    this.eventsRepository = eventsRepository;
-  }
-
   public async execute(eventId:string):Promise<void>{
-    const event = this.eventsRepository.findById(eventId);    
+    const eventRepository = getRepository(Event);
+
+    const event = await eventRepository.findOne({where:{id:eventId}});    
     if(!event) throw new Error('Event not found');
-    this.eventsRepository.delete(event);
+    eventRepository.remove(event);
   }
 }
 export default DeleteEventService;

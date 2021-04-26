@@ -1,3 +1,4 @@
+import { getRepository } from 'typeorm';
 import EventsRepository from '../../repositories/EventRepository';
 
 interface Request {
@@ -5,15 +6,11 @@ interface Request {
 }
 
 class SearchAllEventsByOrganizerId {
-
-  private eventsRepository: EventsRepository;
-  
-  constructor(eventsRepository: EventsRepository) {
-    this.eventsRepository = eventsRepository;
-  } 
-
   public async execute({organizerId}:Request){
-    const events = this.eventsRepository.findByOrganizer(organizerId)
+
+    const eventsRepository = getRepository(Event);
+
+    const events = eventsRepository.find({where:{organizerId}});
 
     return events;
 

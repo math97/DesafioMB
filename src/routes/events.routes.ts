@@ -1,59 +1,65 @@
-import { Router} from 'express';
+import { Request, Response, Router} from 'express';
 
 import CreateEventService from '../services/eventServices/CreateEventService';
 import SearchAllEventsByOrganizerIdService from '../services/eventServices/SearchAllEventsByOrganizerIdService';
+import SearchAllEvents from '../services/eventServices/SearchAllEventsService';
 import UpdateEventService from '../services/eventServices/UpdateEventService';
 import DeleteEventService from '../services/eventServices/DeleteEventService';
 
 import EventUpdateDTO from '../dto/eventUpdateDTO';
 
 import EventsRepository from '../repositories/EventRepository';
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const eventRoutes = Router()
 
 const eventsRepository = new EventsRepository();
 
-eventRoutes.post('/',async (request,response)=>{  
+eventRoutes.post('/',ensureAuthenticated,async (request:Request,response:Response)=>{  
   const {name,description,date,ticket_limit,ticket_price,organizerId } = request.body;
 
-  const createEvent = new CreateEventService(eventsRepository);
+  const createEvent = new CreateEventService();
 
   const event = await createEvent.execute({name,description,organizerId,date,ticket_limit,ticket_price,ticket_sold:0});
 
   response.json(event);
 });
 
-eventRoutes.get('/',async (request,response)=>{
-  const organizer = request.query.organizerId;
+eventRoutes.get('/',ensureAuthenticated,async (request:Request,response:Response)=>{
+  const {organizer} = request.query;
 
-  const organizerId = organizer?.toString();
+  const searchAllEvents = new SearchAllEvents();
 
-  const searchByOrganizerId = new SearchAllEventsByOrganizerIdService(eventsRepository);
+  if(organizer) {
+    const searchByOrganizerId = new SearchAllEventsByOrganizerIdService();
+    const organizerId = organizer?.toString();
 
-  if(!!organizerId){
     const events = await searchByOrganizerId.execute({organizerId});
     response.json(events);
+}
+  const events = await searchAllEvents.execute();
 
-  }
+  response.json(events);
+
 });
 
-eventRoutes.put('/',async (request,response)=>{
+eventRoutes.put('/',ensureAuthenticated,async (request:Request,response:Response)=>{
   
   const  eventData:EventUpdateDTO  = request.body;
 
-  const updateEvent = new UpdateEventService(eventsRepository);
+  const updateEvent = new UpdateEventService();
 
   const event = await updateEvent.execute(eventData);
 
   response.json(event);
 });
 
-eventRoutes.delete('/',async(request,response)=>{  
+eventRoutes.delete('/',ensureAuthenticated,async (request:Request,response:Response)=>{  
   const {eventId} = request.query;
   
   if(!eventId || eventId === undefined) throw new Error('eventId not send');
 
-  const deleteEventService = new DeleteEventService(eventsRepository);
+  const deleteEventService = new DeleteEventService();
 
   deleteEventService.execute(eventId as string);
 

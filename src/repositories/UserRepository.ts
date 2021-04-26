@@ -1,27 +1,29 @@
+import { EntityRepository, Repository } from "typeorm";
 import User from "../models/User";
 
-class UserRepository {
-  private users : User[];
+@EntityRepository()
+class UserRepository extends Repository<User> {
+  // private users : User[];
 
-  constructor(){
-    this.users = [];
-  }
+  // constructor(){
+  //   this.users = [];
+  // }
 
-  public create(user:User){
-    this.users.push(user);
+  // public create(user:User){
+  //   this.users.push(user);
 
-    return user;
-  }
-  public findById(id:string):User | undefined{
-    const user =  this.users.find(u => u.id === id);
+  //   return user;
+  // }
+  // public findById(id:string):User | undefined{
+  //   const user =  this.users.find(u => u.id === id);
 
-    return user;
-  }
-  public findByEmail(email:string):User | undefined{
-    const user =  this.users.find(u => u.email === email);
+  //   return user;
+  // }
+  // public async findByEmail(email:string):Promise<User | null>{
+  //   const user = await this.findOne({where:{email}});
 
-    return user;
-  }
+  //   return user || null;
+  // }
 
 }
 

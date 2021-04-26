@@ -1,6 +1,5 @@
+import { getRepository } from "typeorm";
 import Event from "../../models/Event";
-import Organizer from "../../models/Organizer";
-import EventsRepository from "../../repositories/EventRepository";
 
 interface Request {
   name: string,
@@ -13,16 +12,12 @@ interface Request {
 }
 
 class CreateEventService { 
-  private eventsRepository: EventsRepository;
-  
-  constructor(eventsRepository: EventsRepository) {
-    this.eventsRepository = eventsRepository;
-  } 
   public async execute({name,description,date,ticket_limit,ticket_price,ticket_sold,organizerId}:Request):Promise<Event>{
-        
-      const event = new Event({name,description,date,ticket_limit,ticket_price,ticket_sold,organizerId});
+      
+      const eventRepository = getRepository(Event);
+      const event = eventRepository.create({name,description,date,ticket_limit,ticket_price,ticket_sold});
 
-      this.eventsRepository.create(event);
+      await eventRepository.save(event);
 
       return event;
   }

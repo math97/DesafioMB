@@ -1,16 +1,15 @@
+import { getRepository } from "typeorm";
 import EventUpdateDTO from "../../dto/eventUpdateDTO";
-import EventsRepository from "../../repositories/EventRepository";
+import Event from '../../models/Event';
 
 class UpdateEventService {
-  private eventsRepository:EventsRepository
-  constructor(eventsRepository:EventsRepository){
-    this.eventsRepository = eventsRepository;
-  }
   public async execute(eventData:EventUpdateDTO){
 
-    const event = this.eventsRepository.findById(eventData.id);
+    const eventsRepository = getRepository(Event)
+
+    const event = await eventsRepository.findOne({where:{id:eventData.id}});
     
-    if(!!event) {
+    if(event) {
       if(event.ticket_sold > 0) throw new Error('Update denied because tickets already sold');
   
       if(eventData.name) event.name = eventData.name;
@@ -18,6 +17,8 @@ class UpdateEventService {
       if(eventData.date) event.date = eventData.date;
       if(eventData.ticket_price) event.ticket_price = eventData.ticket_price;
       if(eventData.ticket_limit) event.ticket_limit = eventData.ticket_limit;
+
+      eventsRepository.save(event)
     }
     return event;
   }

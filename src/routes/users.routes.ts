@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Request, Response, Router } from 'express';
 
 import CreateUserService from '../services/userServices/CreateUserService';
 import UpdateUserService from '../services/userServices/UpdateUserService';
@@ -6,6 +6,7 @@ import UpdateUserService from '../services/userServices/UpdateUserService';
 import UserUpdateDTO from '../dto/userUpdateDTO';
 
 import UserRepository from '../repositories/UserRepository';
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const userRoutes = Router();
 
@@ -20,11 +21,11 @@ userRoutes.post('/',async (request,response)=>{
   response.json(user);
 });
 
-userRoutes.put('/',async (request,response)=>{
+userRoutes.put('/',ensureAuthenticated,async (request:Request,response:Response)=>{
 
   const userData:UserUpdateDTO  = request.body;
 
-  const userUpdateService = new UpdateUserService(userRepository);
+  const userUpdateService = new UpdateUserService();
 
   const user = await userUpdateService.execute(userData);
 
