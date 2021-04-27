@@ -8,7 +8,7 @@ import DeleteEventService from '../services/eventServices/DeleteEventService';
 
 import EventUpdateDTO from '../dto/eventUpdateDTO';
 
-import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+import ensureAuthenticated from '../middlewares/ensureOrganizerAuthenticated';
 
 const eventRoutes = Router()
 

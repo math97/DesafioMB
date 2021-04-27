@@ -6,7 +6,7 @@ import UpdateUserService from '../services/userServices/UpdateUserService';
 import UserUpdateDTO from '../dto/userUpdateDTO';
 
 import UserRepository from '../repositories/UserRepository';
-import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+import ensureAuthenticated from '../middlewares/ensureUserAuthenticated';
 
 const userRoutes = Router();
 
@@ -15,11 +15,13 @@ const userRepository = new UserRepository();
 userRoutes.post('/',async (request,response)=>{
   const { name,cpf,password,email,phone_number}  = request.body;
 
-  const createUser = new CreateUserService(userRepository);
+  const createUser = new CreateUserService();
   const user = await createUser.execute({name,cpf,password,email,phone_number});
 
   response.json(user);
 });
+
+userRoutes.use(ensureAuthenticated);
 
 userRoutes.put('/',ensureAuthenticated,async (request:Request,response:Response)=>{
 

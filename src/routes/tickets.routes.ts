@@ -1,9 +1,13 @@
-import { response, Router } from 'express';
+import { Router } from 'express';
 
-import GenerateTicket from '../services/ticketServices/generateTicket';
+import GenerateTicket from '../services/ticketServices/GenerateTicket';
 import SearchTicketById from '../services/ticketServices/SearchTicketByIdService';
 
+import ensureAuthenticated from '../middlewares/ensureUserAuthenticated';
+
 const ticketRoutes = Router();
+
+ticketRoutes.use(ensureAuthenticated); 
 
 ticketRoutes.post('/',async (request,response)=>{
 
