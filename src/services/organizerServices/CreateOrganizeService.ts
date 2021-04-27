@@ -1,4 +1,5 @@
 import { getRepository } from "typeorm";
+import { hash } from 'bcryptjs';
 import Organizer from "../../models/Organizer";
 
 interface Request {
@@ -17,9 +18,11 @@ class CreateOrganizeService {
 
     const organizerEmail = organizerRepository.findOne({where:[{email},{cnpj}]});
     
-    if(!organizerEmail) throw new Error('An account with this email adress or cnpj already exist')
+    if(!organizerEmail) throw new Error('An account with this email adress or cnpj already exist');
 
-    const organizer = organizerRepository.create({name,cnpj,company_name:companyName,email,phone_number,password});
+    const hashedPassword = await hash(password,8);
+
+    const organizer = organizerRepository.create({name,cnpj,company_name:companyName,email,phone_number,password:hashedPassword});
 
     organizerRepository.save(organizer);
     
