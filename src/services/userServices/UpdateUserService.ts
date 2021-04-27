@@ -1,5 +1,6 @@
 import { getRepository } from "typeorm";
 import UserUpdateDTO from "../../dto/userUpdateDTO";
+import AppError from "../../errors/AppError";
 import User from "../../models/User";
 import UserRepository from "../../repositories/UserRepository";
 
@@ -10,7 +11,7 @@ class UpdateUserService{
 
     const user = await  userRepository.findOne({where:{id:userData.id}});
 
-    if(!user) throw new Error('User not found');
+    if(!user) throw new AppError('User not found',402);
 
     if (userData.cpf) user.cpf = userData.cpf;
     if (userData.email) user.email = userData.email;

@@ -4,6 +4,7 @@ import { getRepository } from 'typeorm';
 
 import authConfig from '../../config/authConfig';
 import Organizer from '../../models/Organizer';
+import AppError from '../../errors/AppError';
 
 interface Request {
   email: string;
@@ -17,11 +18,11 @@ class AuthenticateOrganizerService {
 
     const organizer = await organizersRepository.findOne({where:{email}});
 
-    if (!organizer) throw new Error('Incorrect email/password combination.');
+    if (!organizer) throw new AppError('Incorrect email/password combination.',403);
 
     const passwordMatched = await compare(password,organizer.password) ;
     
-    if (!passwordMatched) throw new Error('Incorrect email/password combination.');
+    if (!passwordMatched) throw new AppError('Incorrect email/password combination.',403);
 
     const token = sign({}, authConfig.jwt.secret, {
       subject: organizer.id,

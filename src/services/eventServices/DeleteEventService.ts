@@ -1,4 +1,5 @@
 import { getRepository } from "typeorm";
+import AppError from "../../errors/AppError";
 import Event from '../../models/Event';
 
 class DeleteEventService {
@@ -6,7 +7,7 @@ class DeleteEventService {
     const eventRepository = getRepository(Event);
 
     const event = await eventRepository.findOne({where:{id:eventId}});    
-    if(!event) throw new Error('Event not found');
+    if(!event) throw new AppError('Event not found',404);
     eventRepository.remove(event);
   }
 }
