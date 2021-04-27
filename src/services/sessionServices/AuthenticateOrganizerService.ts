@@ -1,4 +1,5 @@
 import { sign } from 'jsonwebtoken';
+import { compare } from 'bcryptjs';
 import { getRepository } from 'typeorm';
 
 import authConfig from '../../config/authConfig';
@@ -18,7 +19,7 @@ class AuthenticateOrganizerService {
 
     if (!organizer) throw new Error('Incorrect email/password combination.');
 
-    const passwordMatched = password === organizer.password ? true : false ;
+    const passwordMatched = await compare(password,organizer.password) ;
     
     if (!passwordMatched) throw new Error('Incorrect email/password combination.');
 

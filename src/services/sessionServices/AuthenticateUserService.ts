@@ -1,4 +1,5 @@
 import { sign } from 'jsonwebtoken';
+import { compare } from 'bcryptjs';
 import { getRepository } from 'typeorm';
 
 import authConfig from '../../config/authConfig';
@@ -21,9 +22,7 @@ class AuthenticateUserService {
 
     if (!user) throw new Error('Incorrect email/password combination.');
 
-    const passwordMatched = password === user.password ? true : false ;
-
-    console.log(passwordMatched);
+    const passwordMatched = await compare(password,user.password) ;
     
     if (!passwordMatched) throw new Error('Incorrect email/password combination.');
 
